@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VoiceNav Settings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #06060e;
+      color: #e2e8f0;
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .logo-mark {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #0f2a1a, #1a0f2e);
+      border: 1.5px solid rgba(99,255,199,0.4);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-mark svg { color: #63ffc7; width: 20px; height: 20px; }
+
+    h1 {
+      font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: #e2e8f0;
+    }
+
+    h1 span { color: #63ffc7; }
+
+    .subtitle { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 20px;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.7);
+      margin-bottom: 6px;
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      margin-top: 5px;
+      line-height: 1.4;
+    }
+
+    input[type="text"], input[type="password"], input[type="range"], select {
+      width: 100%;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #e2e8f0;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: rgba(99,255,199,0.4);
+    }
+
+    input[type="range"] {
+      padding: 6px 0;
+      accent-color: #63ffc7;
+      cursor: pointer;
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .range-row input { flex: 1; }
+    .range-val {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: #63ffc7;
+      min-width: 36px;
+      text-align: right;
+    }
+
+    .mode-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .mode-card {
+      border: 1.5px solid rgba(255,255,255,0.07);
+      background: rgba(255,255,255,0.02);
+      border-radius: 12px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .mode-card:hover { background: rgba(255,255,255,0.05); }
+
+    .mode-card.active {
+      border-color: rgba(99,255,199,0.4);
+      background: rgba(99,255,199,0.06);
+    }
+
+    .mode-card-top {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .mode-card input[type="radio"] {
+      width: auto;
+      accent-color: #63ffc7;
+    }
+
+    .mode-card-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    .mode-card-desc {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      line-height: 1.4;
+      padding-left: 20px;
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 13px;
+      background: linear-gradient(135deg, rgba(99,255,199,0.15), rgba(99,255,199,0.08));
+      border: 1.5px solid rgba(99,255,199,0.3);
+      border-radius: 12px;
+      color: #63ffc7;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .save-btn:hover {
+      background: linear-gradient(135deg, rgba(99,255,199,0.25), rgba(99,255,199,0.12));
+      border-color: rgba(99,255,199,0.5);
+    }
+
+    .save-btn.saved {
+      background: rgba(99,255,199,0.1);
+      color: rgba(99,255,199,0.6);
+    }
+
+    .api-key-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .api-key-row input { flex: 1; }
+
+    .reveal-btn {
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.08);
+      border-radius: 10px;
+      color: rgba(255,255,255,0.4);
+      padding: 0 12px;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .reveal-btn:hover { color: #e2e8f0; background: rgba(255,255,255,0.08); }
+
+    .hotkey-input-wrap {
+      position: relative;
+    }
+
+    #hotkey-display {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    #hotkey-display.capturing {
+      border-color: rgba(99,255,199,0.5);
+      color: #63ffc7;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <div class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Voice<span>Nav</span> Settings</h1>
+        <div class="subtitle">Configure AI voice navigation</div>
+      </div>
+    </div>
+
+    <!-- Activation Mode -->
+    <div class="card">
+      <div class="card-title">Activation Mode</div>
+      <div class="mode-options">
+        <label class="mode-card" data-mode="popup">
+          <div class="mode-card-top">
+            <input type="radio" name="activationMode" value="popup" />
+            <span class="mode-card-name">🖱️ Click Icon</span>
+          </div>
+          <div class="mode-card-desc">Click the floating mic button on any webpage</div>
+        </label>
+        <label class="mode-card" data-mode="hotkey">
+          <div class="mode-card-top">
+            <input type="radio" name="activationMode" value="hotkey" />
+            <span class="mode-card-name">⌨️ Hotkey</span>
+          </div>
+          <div class="mode-card-desc">Press a keyboard shortcut to start listening</div>
+        </label>
+        <label class="mode-card" data-mode="wakeword">
+          <div class="mode-card-top">
+            <input type="radio" name="activationMode" value="wakeword" />
+            <span class="mode-card-name">💬 Wake Word</span>
+          </div>
+          <div class="mode-card-desc">Say your custom phrase to activate</div>
+        </label>
+        <label class="mode-card" data-mode="always">
+          <div class="mode-card-top">
+            <input type="radio" name="activationMode" value="always" />
+            <span class="mode-card-name">🔴 Always On</span>
+          </div>
+          <div class="mode-card-desc">Continuous listening on every page</div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Hotkey Config -->
+    <div class="card" id="hotkey-card">
+      <div class="card-title">Hotkey Configuration</div>
+      <div class="field">
+        <label>Activation Key</label>
+        <input type="text" id="hotkey-display" placeholder="Click and press a key…" readonly />
+        <div class="field-hint">Click the field above, then press any key to set your hotkey. Default: Space.</div>
+      </div>
+    </div>
+
+    <!-- Wake Word Config -->
+    <div class="card" id="wakeword-card">
+      <div class="card-title">Wake Word Configuration</div>
+      <div class="field">
+        <label>Wake Word / Phrase</label>
+        <input type="text" id="wakeWord" placeholder="e.g. hey nav" />
+        <div class="field-hint">Say this phrase to start listening. Keep it 2-3 words for accuracy.</div>
+      </div>
+    </div>
+
+    <!-- AI Settings -->
+    <div class="card">
+      <div class="card-title">AI Configuration</div>
+      <div class="field">
+        <label>Anthropic API Key</label>
+        <div class="api-key-row">
+          <input type="password" id="apiKey" placeholder="sk-ant-…" />
+          <button class="reveal-btn" id="reveal-key">Show</button>
+        </div>
+        <div class="field-hint">Used for smarter intent matching. Without a key, VoiceNav falls back to fuzzy text matching. Get one at <strong>console.anthropic.com</strong>.</div>
+      </div>
+      <div class="field">
+        <label>Confidence Threshold</label>
+        <div class="range-row">
+          <input type="range" id="confidence" min="0.4" max="0.95" step="0.05" value="0.75" />
+          <div class="range-val" id="confidence-val">0.75</div>
+        </div>
+        <div class="field-hint">Higher = more confirmation prompts. Lower = more direct navigation. Default: 0.75.</div>
+      </div>
+    </div>
+
+    <button class="save-btn" id="save-btn">Save Settings</button>
+  </div>
+
+  <script>
+    let capturedHotkey = '';
+
+    // Load
+    chrome.storage.sync.get(null, (settings) => {
+      if (settings.activationMode) {
+        document.querySelector(`input[value="${settings.activationMode}"]`).checked = true;
+        updateModeCards(settings.activationMode);
+      }
+      if (settings.hotkey) {
+        document.getElementById('hotkey-display').value = settings.hotkey;
+        capturedHotkey = settings.hotkey;
+      }
+      if (settings.wakeWord) document.getElementById('wakeWord').value = settings.wakeWord;
+      if (settings.apiKey) document.getElementById('apiKey').value = settings.apiKey;
+      if (settings.confidence_threshold) {
+        document.getElementById('confidence').value = settings.confidence_threshold;
+        document.getElementById('confidence-val').textContent = settings.confidence_threshold;
+      }
+      updateCardVisibility(settings.activationMode || 'popup');
+    });
+
+    function updateModeCards(mode) {
+      document.querySelectorAll('.mode-card').forEach(c => {
+        c.classList.toggle('active', c.dataset.mode === mode);
+      });
+    }
+
+    function updateCardVisibility(mode) {
+      document.getElementById('hotkey-card').style.display = mode === 'hotkey' ? 'block' : 'none';
+      document.getElementById('wakeword-card').style.display = mode === 'wakeword' ? 'block' : 'none';
+    }
+
+    document.querySelectorAll('input[name="activationMode"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        updateModeCards(radio.value);
+        updateCardVisibility(radio.value);
+      });
+    });
+
+    // Hotkey capture
+    const hotkeyInput = document.getElementById('hotkey-display');
+    hotkeyInput.addEventListener('click', () => {
+      hotkeyInput.classList.add('capturing');
+      hotkeyInput.value = 'Press any key…';
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!hotkeyInput.classList.contains('capturing')) return;
+      e.preventDefault();
+      capturedHotkey = e.code;
+      hotkeyInput.value = e.code;
+      hotkeyInput.classList.remove('capturing');
+    });
+
+    // Range
+    document.getElementById('confidence').addEventListener('input', (e) => {
+      document.getElementById('confidence-val').textContent = parseFloat(e.target.value).toFixed(2);
+    });
+
+    // Reveal key
+    const apiInput = document.getElementById('apiKey');
+    document.getElementById('reveal-key').addEventListener('click', () => {
+      const isPassword = apiInput.type === 'password';
+      apiInput.type = isPassword ? 'text' : 'password';
+      document.getElementById('reveal-key').textContent = isPassword ? 'Hide' : 'Show';
+    });
+
+    // Save
+    document.getElementById('save-btn').addEventListener('click', () => {
+      const mode = document.querySelector('input[name="activationMode"]:checked')?.value || 'popup';
+      const settings = {
+        activationMode: mode,
+        hotkey: capturedHotkey || document.getElementById('hotkey-display').value || 'Space',
+        wakeWord: document.getElementById('wakeWord').value || 'hey nav',
+        apiKey: document.getElementById('apiKey').value.trim(),
+        confidence_threshold: parseFloat(document.getElementById('confidence').value)
+      };
+
+      chrome.storage.sync.set(settings, () => {
+        const btn = document.getElementById('save-btn');
+        btn.textContent = '✓ Saved!';
+        btn.classList.add('saved');
+        setTimeout(() => { btn.textContent = 'Save Settings'; btn.classList.remove('saved'); }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>
